@@ -33,7 +33,7 @@ __device__ int filtrarPixel(int* imgX, int X, int Y, int nLinhas, int nColunas,i
 	return(total);
 }
 
-__global__ void filtroGuassiano(int* imgX, int* imgXF, int nLinhas, int nColunas, int tamFiltro)
+__global__ void filtroGaussiano(int* imgX, int* imgXF, int nLinhas, int nColunas, int tamFiltro)
 {
 	int i = (blockIdx.x * blockDim.x) + threadIdx.x;
 	int j = (blockIdx.y * blockDim.y) + threadIdx.y;
@@ -430,7 +430,7 @@ int main( int argc, char* argv[] )
 		cudaMalloc(&d_imgVRF, size);
 		cudaMemcpy(d_imgVR, imgVR, size, cudaMemcpyHostToDevice);
 		
-		filtroGuassiano<<<numBlocos, threadsPorBloco>>>(d_imgVR, d_imgVRF, nLinhas, nColunas, 5);
+		filtroGaussiano<<<numBlocos, threadsPorBloco>>>(d_imgVR, d_imgVRF, nLinhas, nColunas, 5);
 		cudaDeviceSynchronize();
 
 		error = cudaGetLastError();
@@ -456,7 +456,7 @@ int main( int argc, char* argv[] )
 		cudaMalloc(&d_imgVGF, size);
 		cudaMemcpy(d_imgVG, imgVG, size, cudaMemcpyHostToDevice);
 
-		filtroGuassiano<<<numBlocos, threadsPorBloco>>>(d_imgVG, d_imgVGF, nLinhas, nColunas, 5);
+		filtroGaussiano<<<numBlocos, threadsPorBloco>>>(d_imgVG, d_imgVGF, nLinhas, nColunas, 5);
 		cudaDeviceSynchronize();
 
 		error = cudaGetLastError();
@@ -483,7 +483,7 @@ int main( int argc, char* argv[] )
 		cudaMalloc(&d_imgVBF, size);
 		cudaMemcpy(d_imgVB, imgVB, size, cudaMemcpyHostToDevice);
 		
-		filtroGuassiano<<<numBlocos, threadsPorBloco>>>(d_imgVB, d_imgVBF, nLinhas, nColunas, 5);
+		filtroGaussiano<<<numBlocos, threadsPorBloco>>>(d_imgVB, d_imgVBF, nLinhas, nColunas, 5);
 		cudaDeviceSynchronize();
 
 		error = cudaGetLastError();
@@ -594,7 +594,7 @@ int main( int argc, char* argv[] )
 
 		//printf("n = %d nTx = %d nTy = %d\n nBx = %d nBy = %d\n", n, threadsPorBloco.x, threadsPorBloco.y, numBlocos.x, numBlocos.y);
 
-		filtroGuassiano<<<numBlocos, threadsPorBloco>>>(d_imgVGray, d_imgVGrayFinal, nLinhas, nColunas, 5);
+		filtroGaussiano<<<numBlocos, threadsPorBloco>>>(d_imgVGray, d_imgVGrayFinal, nLinhas, nColunas, 5);
 
 		cudaDeviceSynchronize();
 
@@ -640,3 +640,4 @@ int main( int argc, char* argv[] )
 
     return 0;
 }
+
